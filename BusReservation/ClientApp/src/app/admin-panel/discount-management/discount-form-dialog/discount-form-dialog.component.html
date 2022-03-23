@@ -1,0 +1,61 @@
+<h2 *ngIf="!isEditing" mat-dialog-title>Dodaj zniżkę</h2>
+<h2 *ngIf="isEditing" mat-dialog-title>Edytuj zniżkę</h2>
+<form [formGroup]="form">
+  <mat-form-field style="width: 100%">
+    <mat-label> Nazwa zniżki </mat-label>
+    <input
+      matInput
+      formControlName="discountNameControl"
+      placeholder="Nazwa zniżki"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.discountNameControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+  <mat-form-field style="width: 100%">
+    <mat-label>Zniżka</mat-label>
+    <input
+      matInput
+      formControlName="percentageDiscountControl"
+      placeholder="Zniżka"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.percentageDiscountControl.invalid"
+      >Pole wymagane i musi być mniejsze bądz równe 100</mat-error
+    >
+  </mat-form-field>
+  <mat-dialog-actions align="end">
+    <button
+      *ngIf="!isEditing"
+      mat-raised-button
+      color="primary"
+      class="add-button"
+      (click)="addEditDiscount(form.value)"
+      matTooltip="Dodaj zniżkę"
+      [disabled]="!form.valid"
+    >
+      Dodaj <mat-icon>add_circle</mat-icon>
+    </button>
+    <button
+      *ngIf="isEditing"
+      mat-raised-button
+      color="accent"
+      class="add-button"
+      (click)="addEditDiscount(form.value)"
+      matTooltip="Edytuj zniżkę"
+      [disabled]="!form.valid"
+    >
+      Edytuj <mat-icon>edit</mat-icon>
+    </button>
+
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="closeDialog()"
+      matTooltip="Anuluj"
+    >
+      Anuluj
+    </button>
+  </mat-dialog-actions>
+</form>

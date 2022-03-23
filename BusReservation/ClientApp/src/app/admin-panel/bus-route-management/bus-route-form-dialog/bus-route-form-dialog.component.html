@@ -1,0 +1,182 @@
+<h2 *ngIf="!isEditing" mat-dialog-title>Dodaj Połączenie Autobusowe</h2>
+<h2 *ngIf="isEditing" mat-dialog-title>Edytuj Połączenie Autobusowe</h2>
+<form [formGroup]="form">
+  <mat-form-field style="width: 100%">
+    <mat-label>Z przystanku</mat-label>
+    <input
+      matInput
+      formControlName="fromStationControl"
+      placeholder="Z przystanku"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.fromStationControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Do przystanku</mat-label>
+    <input
+      matInput
+      formControlName="toStationControl"
+      placeholder="Do przystanku"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.toStationControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Autobus</mat-label>
+    <input
+      matInput
+      formControlName="busControl"
+      placeholder="Autobus"
+      autocomplete="off"
+      [matAutocomplete]="autoBus"
+    />
+
+    <mat-autocomplete
+      #autoBus="matAutocomplete"
+      [displayWith]="displayBus"
+    >
+      <mat-option
+        *ngFor="let option of filteredBusOptions | async"
+        [value]="option"
+      >
+        {{ option.busId }} {{ option.busCompany }} {{ option.numberOfSeats }} 
+      </mat-option>
+    </mat-autocomplete>
+
+    
+    <mat-error *ngIf="form.controls.busControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Kierowca</mat-label>
+    <input
+      matInput
+      formControlName="userControl"
+      placeholder="Kierowca"
+      autocomplete="off"
+      [matAutocomplete]="autoDriver"
+    />
+
+    <mat-autocomplete
+      #autoDriver="matAutocomplete"
+      [displayWith]="displayDiver"
+    >
+      <mat-option
+        *ngFor="let option of filteredDiversOptions | async"
+        [value]="option"
+      >
+        {{ option.userId }} {{ option.firstName }} {{ option.surname }} 
+      </mat-option>
+    </mat-autocomplete>
+
+    
+    <mat-error *ngIf="form.controls.busControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Liczba Km</mat-label>
+    <input
+      matInput
+      formControlName="numberKmControl"
+      placeholder="Liczba Km"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.numberKmControl.invalid"
+      >Pole wymagane i musi zawierać same cyfry</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Cena</mat-label>
+    <input
+      matInput
+      formControlName="priceControl"
+      placeholder="Cena"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.priceControl.invalid"
+      >Pole wymagane i musi zawierać same cyfry</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Godzina</mat-label>
+    <input
+      matInput
+      formControlName="hourControl"
+      placeholder="Godzina"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.hourControl.invalid"
+      >Pole wymagane i musi zawierać same cyfry</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Minuta</mat-label>
+    <input
+      matInput
+      formControlName="minuteControl"
+      placeholder="Minuta"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.minuteControl.invalid"
+      >Pole wymagane i musi zawierać same cyfry</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Przez Stacje</mat-label>
+    <input
+      matInput
+      formControlName="throughStationsControl"
+      placeholder="Przez Stacje"
+      autocomplete="off"
+    />
+  </mat-form-field>
+  
+  <mat-dialog-actions align="end">
+    <button
+      *ngIf="!isEditing"
+      mat-raised-button
+      color="primary"
+      class="add-button"
+      (click)="addEditBusRoute(form.value)"
+      matTooltip="Dodaj połączenie autobusowe"
+      [disabled]="!form.valid"
+    >
+      Dodaj <mat-icon>add_circle</mat-icon>
+    </button>
+    <button
+      *ngIf="isEditing"
+      mat-raised-button
+      color="accent"
+      class="add-button"
+      (click)="addEditBusRoute(form.value)"
+      matTooltip="Edytuj połączenie autobusowe"
+      [disabled]="!form.valid"
+    >
+      Edytuj <mat-icon>edit</mat-icon>
+    </button>
+
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="closeDialog()"
+      matTooltip="Anuluj"
+    >
+      Anuluj
+    </button>
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,89 @@
+<h2  *ngIf="!isEditing" mat-dialog-title>Dodaj użytkownika</h2>
+<h2  *ngIf="isEditing" mat-dialog-title>Edytuj użytkownika</h2>
+<form [formGroup]="form">
+  <mat-form-field style="width: 100%">
+    <mat-label>Imię</mat-label>
+    <input
+      matInput
+      formControlName="firstNameControl"
+      placeholder="Imię"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.firstNameControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Nazwisko</mat-label>
+    <input
+      matInput
+      formControlName="surnameControl"
+      placeholder="Nazwisko"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.surnameControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Numer Telefonu</mat-label>
+    <input
+      matInput
+      formControlName="phoneControl"
+      placeholder="np. 999888777"
+      autocomplete="off"
+      maxlength="9"
+    />
+    <mat-error *ngIf="form.controls.phoneControl.invalid"
+      >Pole wymagane i musi zawierać 9 cyfr</mat-error
+    >
+  </mat-form-field>
+
+  <mat-form-field style="width: 100%">
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      formControlName="emailControl"
+      placeholder="np. jan.kowalski@gmail.com"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.emailControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+  <mat-checkbox formControlName="isDriverControl">Czy użytkownik jest kierowcą?</mat-checkbox>
+
+  
+  <mat-dialog-actions align="end">
+    <button
+      *ngIf="!isEditing"
+      mat-raised-button
+      color="primary"
+      class="add-button"
+      (click)="addEditUser(form.value)"
+      matTooltip="Dodaj użytkownika"
+      [disabled]="!form.valid"
+    >
+      Dodaj <mat-icon>add_circle</mat-icon>
+    </button>
+    <button
+      *ngIf="isEditing"
+      mat-raised-button
+      color="accent"
+      class="add-button"
+      (click)="addEditUser(form.value)"
+      matTooltip="Edytuj użytkownika"
+      [disabled]="!form.valid"
+    >
+      Edytuj <mat-icon>edit</mat-icon>
+    </button>
+
+    <button mat-raised-button
+    color="warn"
+    (click)="closeDialog()"
+    matTooltip="Anuluj"
+    >Anuluj</button>
+  </mat-dialog-actions>
+</form>

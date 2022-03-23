@@ -1,0 +1,58 @@
+<h2  *ngIf="!isEditing" mat-dialog-title>Dodaj autobus</h2>
+<h2  *ngIf="isEditing" mat-dialog-title>Edytuj autobus</h2>
+<form [formGroup]="form">
+  <mat-form-field style="width: 100%">
+    <mat-label>Firma</mat-label>
+    <input
+      matInput
+      formControlName="busCompanyControl"
+      placeholder="Firma"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.busCompanyControl.invalid"
+      >Pole wymagane</mat-error
+    >
+  </mat-form-field>
+  <mat-form-field style="width: 100%">
+    <mat-label>Liczba siedzeń</mat-label>
+    <input
+      matInput
+      formControlName="numberOfSeatsControl"
+      placeholder="Liczba siedzeń"
+      autocomplete="off"
+    />
+    <mat-error *ngIf="form.controls.numberOfSeatsControl.invalid"
+      >Pole wymagane i musi zawierać same cyfry</mat-error
+    >
+  </mat-form-field>
+  <mat-dialog-actions align="end">
+    <button
+      *ngIf="!isEditing"
+      mat-raised-button
+      color="primary"
+      class="add-button"
+      (click)="addEditBus(form.value)"
+      matTooltip="Dodaj autobus"
+      [disabled]="!form.valid"
+    >
+      Dodaj <mat-icon>add_circle</mat-icon>
+    </button>
+    <button
+      *ngIf="isEditing"
+      mat-raised-button
+      color="accent"
+      class="add-button"
+      (click)="addEditBus(form.value)"
+      matTooltip="Edytuj autobus"
+      [disabled]="!form.valid"
+    >
+      Edytuj <mat-icon>edit</mat-icon>
+    </button>
+
+    <button mat-raised-button
+    color="warn"
+    (click)="closeDialog()"
+    matTooltip="Anuluj"
+    >Anuluj</button>
+  </mat-dialog-actions>
+</form>

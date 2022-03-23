@@ -1,0 +1,6 @@
+<h2 mat-dialog-title>Szczegóły Autobusu</h2>
+<div *ngIf="data.bus">
+    Numer autobusu: <strong>{{ data.bus.busId }}</strong><br />
+    Firma: <strong>{{ data.bus.busCompany }}</strong><br />
+    Liczba siedzeń <strong>{{ data.bus.numberOfSeats }}</strong><br />
+</div>

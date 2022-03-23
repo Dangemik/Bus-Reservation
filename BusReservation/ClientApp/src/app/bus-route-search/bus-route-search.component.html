@@ -1,0 +1,66 @@
+<!-- Search Route Form -->
+<form [formGroup]="routes" class="search-form">
+  <mat-form-field class="search-full-width">
+    <mat-label>Z</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="fromStation"
+      [matAutocomplete]="autoFromStation"
+    />
+    <mat-error *ngIf="routes.controls.fromStation.invalid"
+      >Pole wymagane</mat-error
+    >
+    <mat-autocomplete
+      #autoFromStation="matAutocomplete"
+      [displayWith]="displayFromStation"
+    >
+      <mat-option
+        *ngFor="let option of filteredOptionsFromStation | async"
+        [value]="option"
+      >
+        {{ option.fromStation }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="search-full-width">
+    <mat-label>Do</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="toStation"
+      [matAutocomplete]="autoToStation"
+    />
+    <mat-error *ngIf="routes.controls.toStation.invalid"
+      >Pole wymagane</mat-error
+    >
+    <mat-autocomplete
+      #autoToStation="matAutocomplete"
+      [displayWith]="displayToStation"
+    >
+      <mat-option
+        *ngFor="let option of filteredOptionsToStation | async"
+        [value]="option"
+      >
+        {{ option.toStation }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="search-full-width">
+    <mat-label>Data</mat-label>
+    <input matInput [min]="minTravelDate" [matDatepicker]="picker" formControlName="date"/>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="openReservationDialog()"
+    style="float: right;"
+  >
+    Szukaj
+  </button>
+</form>

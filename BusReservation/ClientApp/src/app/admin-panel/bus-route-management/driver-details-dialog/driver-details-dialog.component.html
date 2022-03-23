@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Szczegóły Kierowcy</h2>
+<div *ngIf="data.user">
+    Imie: <strong>{{ data.user.firstName }}</strong><br />
+    Nazwisko: <strong>{{ data.user.surname }}</strong><br />
+    Telefon: <strong>{{ data.user.phone }}</strong><br />
+    Email: <strong>{{ data.user.email }}</strong><br />
+    Data Zatrudnienia: <strong>{{ data.user.creationDate }}</strong><br />
+</div>

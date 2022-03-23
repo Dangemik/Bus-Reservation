@@ -1,0 +1,326 @@
+<!-- DATA INFO -->
+<mat-grid-list cols="3" rowHeight="fit" style="height: 400px">
+  <!-- First Step Route-->
+  <mat-grid-tile>
+    <div *ngIf="busRoute">
+      <strong><mat-icon>directions_bus</mat-icon>Dane przejadu:</strong><br />
+      Data: <strong>{{ data.busRouteDate | date: "dd/MM/yyyy" }}</strong
+      ><br />
+      Z przystanku: <strong>{{ busRoute.fromStation }}</strong
+      ><br />
+      Do przystanku: <strong>{{ busRoute.toStation }}</strong
+      ><br />
+      Godzina:
+      <strong>{{ busRoute.hour }}:{{ busRoute.minute }}</strong>
+      <br />
+      Przez przystanki: <strong>{{ busRoute.throughStations }}</strong>
+      <br />
+      Liczba km: <strong>{{ busRoute.numberKm }}</strong> <br />
+      Cena: <strong>{{ busRoute.price }} zł</strong> <br />
+      Firma: <strong>{{ busRoute.bus.busCompany }}</strong> <br />
+      Numer autobusu: <strong>{{ busRoute.bus.busId }}</strong> <br />
+    </div>
+  </mat-grid-tile>
+
+  <!-- Second step User-->
+  <mat-grid-tile>
+    <div *ngIf="user">
+      <strong><mat-icon>account_circle</mat-icon>Dane osobiste:</strong><br />
+      Imię: <strong>{{ user.firstName }}</strong
+      ><br />
+      Nazwisko: <strong>{{ user.surname }}</strong
+      ><br />
+      Numer telefonu: <strong>{{ user.phone }}</strong
+      ><br />
+      Email: <strong>{{ user.email }}</strong
+      ><br />
+    </div>
+  </mat-grid-tile>
+
+  <!-- Third step Seats-->
+  <mat-grid-tile style="overflow-y: auto !important">
+    <div *ngIf="bookedSeats.length > 0">
+      <strong>Wybrano miejsca:</strong><br />
+      <span *ngFor="let seat of bookedSeats"> {{ seat }} </span><br />
+
+      <div
+        style="font-size: 14px"
+        *ngFor="let selectedDiscount of selectedDiscountTicketsList"
+      >
+        <!-- select seats -->
+        <mat-form-field appearance="fill" style="width: 20%; margin-right: 1%">
+          <mat-label>Ilość</mat-label>
+          <mat-select
+            [(value)]="selectedDiscount.numberSeats"
+            (selectionChange)="selectedNumberSeats()"
+          >
+            <span *ngFor="let item of bookedSeats; let i = index">
+              <mat-option [value]="i + 1">{{ i + 1 }} </mat-option>
+            </span>
+          </mat-select>
+        </mat-form-field>
+        <!-- select discount -->
+        <mat-form-field appearance="fill" style="width: 60%">
+          <mat-label>Wybierz zniżkę</mat-label>
+          <mat-select [(value)]="selectedDiscount.discount">
+            <span *ngFor="let discount of discounts">
+              <mat-option [value]="discount"
+                >{{ discount.discountName }} ({{ discount.percentageDiscount }}
+                %)
+              </mat-option>
+            </span>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Added Discount -->
+      <button
+        *ngIf="selectedDiscountTicketsList.length < 4"
+        mat-icon-button
+        matTooltip="Dodaj zniżkę"
+        color="primary"
+        (click)="addDiscount()"
+      >
+        <mat-icon> add_circle_outline </mat-icon>
+      </button>
+      <!-- Delete Dicount -->
+      <button
+        *ngIf="selectedDiscountTicketsList.length > 1"
+        mat-icon-button
+        matTooltip="Usuń zniżkę"
+        color="warn"
+        (click)="deleteDiscount()"
+      >
+        <mat-icon> delete </mat-icon>
+      </button>
+
+      <mat-error *ngIf="this.numberSelectedTickets > bookedSeats.length"
+        >Wybrano za dużo miejsc w zniżce</mat-error
+      >
+      <mat-error *ngIf="this.numberSelectedTickets < bookedSeats.length"
+        >Wybrano za mało miejsc w zniżce</mat-error
+      >
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<!-- STEPPER -->
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <!-- First Step Route-->
+  <mat-step [stepControl]="routeForm">
+    <form [formGroup]="routeForm">
+      <ng-template matStepLabel>Wybierz swoje połaczenie</ng-template>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="fromStation">
+            <th mat-header-cell *matHeaderCellDef>Z przystanku</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.fromStation }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="toStation">
+            <th mat-header-cell *matHeaderCellDef>Do przystanku</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.toStation }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef>Godzina</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.hour }}:{{ element.minute }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="throughStations">
+            <th mat-header-cell *matHeaderCellDef>Przez przystanki</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.throughStations }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="numberKm">
+            <th mat-header-cell *matHeaderCellDef>Liczba km</th>
+            <td mat-cell *matCellDef="let element">{{ element.numberKm }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Cena</th>
+            <td mat-cell *matCellDef="let element">{{ element.price }} zł</td>
+          </ng-container>
+
+          <ng-container matColumnDef="busCompany">
+            <th mat-header-cell *matHeaderCellDef>Firma</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.bus.busCompany }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="busId">
+            <th mat-header-cell *matHeaderCellDef>Numer autobusu</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.bus.busId }}
+            </td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="chooseRoute(element); SearchOccupiedSeats()"
+                matStepperNext
+              >
+                Wybierz
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator
+          [pageSizeOptions]="[5]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+
+      <input matInput formControlName="busRouteId" required hidden />
+    </form>
+  </mat-step>
+
+  <!-- Second step User-->
+  <mat-step [stepControl]="userForm">
+    <form [formGroup]="userForm">
+      <ng-template matStepLabel>Wypełnij dane użytkownika</ng-template>
+
+      <div style="width: 50%; float: left">
+        <p>
+          <mat-form-field>
+            <mat-label>Imię</mat-label>
+            <input
+              matInput
+              formControlName="firstName"
+              placeholder="Imię"
+              autocomplete="off"
+            />
+            <mat-error *ngIf="userForm.controls.firstName.invalid"
+              >Pole wymagane</mat-error
+            >
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field>
+            <mat-label>Nazwisko</mat-label>
+            <input
+              matInput
+              formControlName="surname"
+              placeholder="Nazwisko"
+              autocomplete="off"
+            />
+            <mat-error *ngIf="userForm.controls.surname.invalid"
+              >Pole wymagane</mat-error
+            >
+          </mat-form-field>
+        </p>
+      </div>
+
+      <div style="width: 50%; float: left">
+        <p>
+          <mat-form-field>
+            <mat-label>Numer Telefonu</mat-label>
+            <input
+              matInput
+              formControlName="phone"
+              placeholder="np. 999888777"
+              autocomplete="off"
+              maxlength="9"
+            />
+            <mat-error *ngIf="userForm.controls.phone.invalid"
+              >Pole wymagane i musi zawierać 9 cyfr</mat-error
+            >
+          </mat-form-field>
+        </p>
+
+        <p>
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              placeholder="np. jan.kowalski@gmail.com"
+              autocomplete="off"
+            />
+            <mat-error *ngIf="userForm.controls.email.invalid"
+              >Pole wymagane</mat-error
+            >
+          </mat-form-field>
+        </p>
+      </div>
+
+      <div>
+        <button mat-raised-button color="warn" matStepperPrevious>
+          Cofnij
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          matStepperNext
+          style="margin-left: 10px"
+          (click)="setUserData()"
+          [disabled]="!userForm.valid"
+        >
+          Dalej
+        </button>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- Third step User-->
+  <mat-step>
+    <ng-template matStepLabel>Wybierz swoje miejscę</ng-template>
+    <p style="text-align: center">
+      <span *ngFor="let seat of seatsArray">
+        <span *ngIf="(seat % (this.seatsArray.length / 4)) - 1 == 0"
+          ><br
+        /></span>
+        <span *ngIf="(seat % (this.seatsArray.length / 2)) - 1 == 0"
+          ><br
+        /></span>
+        <button
+          mat-icon-button
+          [matTooltip]="seat"
+          color="primary"
+          class="seats"
+          [id]="seat"
+          (click)="BookSeat(seat)"
+        >
+          <mat-icon> airline_seat_recline_normal </mat-icon>
+        </button>
+      </span>
+    </p>
+    <div>
+      <button mat-raised-button color="warn" matStepperPrevious>Cofnij</button>
+      <button
+        mat-raised-button
+        color="primary"
+        style="margin-left: 10px"
+        (click)="bookTicket()"
+      >
+        Zarezerwuj
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        style="margin-left: 10px; background-color: #0c8a0c!important"
+        (click)="buyTicket()"
+      >
+        Kup bilet
+      </button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

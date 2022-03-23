@@ -1,0 +1,17 @@
+table {
+  width: 100%;
+}
+
+mat-grid-tile {
+  border: 1px solid black;
+}
+
+mat-form-field.mat-form-field {
+  width: 20vw;
+}
+
+.seats {
+  margin:0 1vw;
+  border: 1px solid;
+  color: green;
+}

@@ -1,0 +1,83 @@
+<mat-grid-list cols="2" rowHeight="fit" style="height: 330px">
+  <!-- Personal Details -->
+  <mat-grid-tile>
+    <div class="cards">
+      <h2><mat-icon>account_circle</mat-icon>Dane osobiste</h2>
+      <div *ngIf="data.user" style="margin-left: 30px">
+        Imię: <strong>{{ data.user.firstName }}</strong
+        ><br />
+        Nazwisko: <strong>{{ data.user.surname }}</strong
+        ><br />
+        Numer telefonu: <strong>{{ data.user.phone }}</strong
+        ><br />
+        Email: <strong>{{ data.user.email }}</strong>
+        <br />
+        Data utworzenia: <strong>{{ data.user.creationDate | date: "dd-MM-yyyy H:mm" }}</strong>
+        <br />
+        <span *ngIf="data.user.deletionDate != '0001-01-01T00:00:00'">Data usunięcia: <strong>{{ data.user.deletionDate | date: "dd-MM-yyyy H:mm"}}</strong></span>
+      </div>
+    </div>
+  </mat-grid-tile>
+
+  <!-- Bus Route -->
+  <mat-grid-tile>
+    <div class="cards">
+      <h2><mat-icon>directions_bus</mat-icon>Dane przejadu</h2>
+      <div *ngIf="data.busRoute" style="margin-left: 30px">
+        Data: <strong>{{ data.travelDate | date: "dd/MM/yyyy" }}</strong
+        ><br />
+        Z przystanku: <strong>{{ data.busRoute.fromStation }}</strong
+        ><br />
+        Do przystanku: <strong>{{ data.busRoute.toStation }}</strong
+        ><br />
+        Godzina:
+        <strong>{{ data.busRoute.hour }}:{{ data.busRoute.minute }}</strong>
+        <br />
+        Przez przystanki:
+        <strong>{{ data.busRoute.throughStations }}</strong>
+        <br />
+        Liczba km: <strong>{{ data.busRoute.numberKm }}</strong> <br />
+        Cena: <strong>{{ data.busRoute.price }} zł</strong> <br />
+        Firma: <strong>{{ data.busRoute.bus.busCompany }}</strong> <br />
+        Numer autobusu: <strong>{{ data.busRoute.bus.busId }}</strong><br> 
+        Data utworzenia: <strong>{{ data.busRoute.creationDate | date: "dd-MM-yyyy H:mm" }}</strong>
+        <br />
+        <span *ngIf="data.busRoute.deletionDate != '0001-01-01T00:00:00'">Data usunięcia: <strong>{{ data.busRoute.deletionDate | date: "dd-MM-yyyy H:mm"}}</strong></span>
+        <br />
+      </div>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<div class="cards">
+  <h2><mat-icon>airline_seat_recline_normal</mat-icon>Podsumowanie</h2>
+  <div
+      *ngIf="data.seats && data.selectedDiscountTickets"
+      style="margin-left: 30px"
+    >
+      Zarezerwowane miejsca:
+      <strong *ngFor="let seat of data.seats">{{ seat }} </strong><br /><strong
+        >Zniżki i cena</strong
+      ><br />
+      <span *ngFor="let discount of data.selectedDiscountTickets">
+        {{ discount.discount.discountName }}({{
+          discount.discount.percentageDiscount
+        }}
+        %):
+        <strong
+          >{{ discount.numberSeats }} -
+          {{
+            discount.numberSeats *
+              (data.busRoute.price -
+                (data.busRoute.price * discount.discount.percentageDiscount) /
+                  100) | number: "1.0-2"
+          }}
+          zł </strong
+        ><br />
+      </span>
+      Cena całkowita: <strong>{{ totalPrice | number: "1.0-2"}} zł</strong>
+    </div>
+    <br>
+    <!-- Status -->
+    <h2><mat-icon>check_circle</mat-icon>Status: {{status}}</h2>
+</div>

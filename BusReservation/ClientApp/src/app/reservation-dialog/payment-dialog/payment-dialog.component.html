@@ -1,0 +1,26 @@
+<h2 mat-dialog-title><mat-icon>payment</mat-icon> Zapłać Blikiem</h2>
+<mat-form-field style="width: 100%;">
+    <mat-label>Kod BLIK</mat-label>
+    <input matInput [formControl]="blikCode" placeholder="000000" autocomplete="off" maxlength="6">
+    <mat-error *ngIf="blikCode.invalid">
+        Pole musi zawierać 6 cyfr.
+    </mat-error>
+</mat-form-field>
+<mat-dialog-actions align="end">
+    <button
+        mat-raised-button
+        color="primary"
+        style="background-color: #0c8a0c!important"
+        [disabled]="!blikCode.valid"
+        (click)="payTheTicket(blikCode.value)">
+        Zapłać
+    </button>
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="closeDialog()"
+      matTooltip="Anuluj"
+    >
+      Anuluj
+    </button>
+</mat-dialog-actions>
